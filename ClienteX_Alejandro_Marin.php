@@ -46,7 +46,7 @@ class WP_Contacts_Manager {
     
     public function __construct() {
         global $wpdb;
-        $this->wpcm = $wpdb->prefix . "wpcm";
+        $this->wpcm = $wpdb->prefix . "Alejandro_Marin";
         add_action('init', array(&$this, 'WP_Contacts_Manager_Text_Domain'));
         register_activation_hook(WP_CONTACTS_MANAGER_PLUGIN_BASE_NAME, array(&$this, 'WP_Contacts_Manager_Installation'));
         add_action('admin_enqueue_scripts', array(&$this, 'WP_Contacts_Manager_Assets_Scripts'), 1);
@@ -104,7 +104,8 @@ class WP_Contacts_Manager {
     public function WP_Contacts_Manager_Assets_Menu() {
         $icon = plugins_url("includes/images/icon.png", __FILE__);
         add_menu_page('WP Contacts', __('Leads Cliente X', $this->text_domain), '' . $this->text_domain . '-contacts', $this->text_domain, 'dashicons-visibilit', '' . $icon . '', 10, 5 );
-        add_submenu_page($this->text_domain, __('Contacts', $this->text_domain), __('Contacts', $this->text_domain), 'manage_options', '' . $this->text_domain . '-contacts', array($this, 'WP_Contacts_Manager_Contact_Area'));
+        add_submenu_page($this->text_domain, __('Settings', $this->text_domain), __('Settings', $this->text_domain), 'manage_options', '' . $this->text_domain . '-contacts', array($this, 'WP_Contacts_Manager_Contact_Area'));
+        add_submenu_page($this->text_domain, __('Manual', $this->text_domain), __('Manual', $this->text_domain), 'manage_options', '' . $this->text_domain . '-manual', array($this, 'WP_Manual'));
         remove_submenu_page($this->text_domain, $this->text_domain);
     }
 
@@ -133,6 +134,12 @@ class WP_Contacts_Manager {
     public function WP_Contacts_Manager_Contact_Area() {
         if (file_exists(WP_CONTACTS_MANAGER_DIR . 'templates' . DIRSP . 'wp-contacts-manager-contact.php')) {
             include(WP_CONTACTS_MANAGER_DIR . 'templates' . DIRSP . 'wp-contacts-manager-contact.php');
+        }
+    }
+
+    public function WP_Manual() {
+        if (file_exists(WP_CONTACTS_MANAGER_DIR . 'templates' . DIRSP . 'wp-manual.php')) {
+            include(WP_CONTACTS_MANAGER_DIR . 'templates' . DIRSP . 'wp-manual.php');
         }
     }
 
@@ -264,9 +271,46 @@ class WP_Contacts_Manager {
         exit();
     }
 
-    
-
 }
 
 $WP_Contacts_Manager = new WP_Contacts_Manager();
+
+function formulario($atts)
+{
+    $args = shortcode_atts(array(
+        'name' => 'Name',
+        'lastname'  => 'Lastname',
+        'phone'  => 'Phone',
+        'save'  => 'Save',
+    ), $atts);
+
+    $un = $args["name"];
+    $ul = $args["lastname"];
+    $up = $args["phone"];
+    $us = $args["save"];
+
+    $name = "Nombre: <input type='text' placeholder='" . $un . "' ><br>";
+    $lastname = "Apellido: <input type='text' placeholder='" . $ul . "' ><br>";
+    $phone = "Telefono: <input type='text' placeholder='" . $up . "' ><br>";
+    $save = "<input type='submit' class='search-submit' value='" . $us . "'>";
+
+    $campos = $name . ' ' . $lastname . ' ' . $phone.' '.$save;
+
+    return $campos;
+}
+
+function agradecimiento($atts)
+{
+    $args = shortcode_atts(array(
+        'message' => 'Gracias, pronto estaremos en contacto :)',
+    ), $atts);
+
+    $um = $args["message"];
+
+    $message = "<h1>" . $um . "</h1>";
+
+    return $message;
+}
+
+add_shortcode("agradecimiento", "agradecimiento");
 ?>

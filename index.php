@@ -1,6 +1,6 @@
 <?php
 /**
-*   @package    WP Contacts Manager WordPress Plugin
-*   @author     Labarta
+*   @package    Cliente X Alejandro Marin WordPress Plugin
+*   @author     Alejandro Marin
 */
 ?>
